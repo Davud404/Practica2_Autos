@@ -1,5 +1,7 @@
 'use strict';
 var models = require('../models');
+const moment = require('moment');
+const { Op } = require('sequelize');
 var venta = models.venta;
 var empleado = models.empleado;
 var cliente = models.cliente;
@@ -19,27 +21,40 @@ class VentaControl {
         res.status(200);
         res.json({ msg: "OK", code: 200, datos: lista });
     }
-    //TODO: arreglar por que no sirve xd
-    async obtener(req, res) {
-        const external = req.params.external;
-        var lista = await venta.findAll({
-            where: { fecha: external },
-            attributes: ['fecha', 'recargo', 'total', 'external_id'],
-            include: [
-                { model: models.empleado, as: 'empleado', attributes: ['nombres','apellidos'] },
-                { model: models.cliente, as: 'cliente', attributes: ['nombres','apellidos'] },
-                { model: models.auto, as: 'auto', attributes: ['marca','descripcion','precio'] }
-            ]
-        });
-        if (lista === undefined || lista == null) {
-            res.status(200);
-            res.json({ msg: "No existen ventas en esa fecha", code: 200, datos: {} });
-        } else {
-            res.status(200);
-            res.json({ msg: "OK", code: 200, datos: lista });
-        }
 
+    async obtenerPorMes(req, res) {
+        const external = req.params.external;
+        const fechaInicio = moment(external, 'YYYY-MM').startOf('month').toDate();
+        const fechaFin = moment(external, 'YYYY-MM').endOf('month').toDate();
+    
+        try {
+            const lista = await venta.findAll({
+                where: {
+                    fecha: {
+                        [Op.between]: [fechaInicio, fechaFin]
+                    }
+                },
+                attributes: ['fecha', 'recargo', 'total', 'external_id'],
+                include: [
+                    { model: models.empleado, as: 'empleado', attributes: ['nombres', 'apellidos'] },
+                    { model: models.cliente, as: 'cliente', attributes: ['nombres', 'apellidos'] },
+                    { model: models.auto, as: 'auto', attributes: ['marca', 'descripcion', 'precio'] }
+                ]
+            });
+    
+            if (!lista || lista.length === 0) {
+                res.status(200);
+                res.json({ msg: "No existen ventas en ese mes", code: 200, datos: [] });
+            } else {
+                res.status(200);
+                res.json({ msg: "OK", code: 200, datos: lista });
+            }
+        } catch (error) {
+            res.status(500);
+            res.json({ msg: "Error interno del servidor", code: 500, error_msg: error.message });
+        }
     }
+    
 
     async realizarVenta(req, res) {
         if (req.body.hasOwnProperty('fecha') &&
@@ -90,13 +105,13 @@ class VentaControl {
                                 res.status(401);
                                 res.json({ msg: "Error", tag: "No se realizó la venta", code: 401 });
                             } else {
-                                /*emplead.external_id = uuid.v4();
+                                emplead.external_id = uuid.v4();
                                 client.external_id = uuid.v4();
                                 aut.external_id = uuid.v4();
                                 await emplead.save();
                                 await client.save();
                                 await aut.save();
-                                */res.status(200);
+                                res.status(200);
                                 res.json({ msg: "OK", tag:"Venta realizada", code: 200 });
                             }
                         } else {
