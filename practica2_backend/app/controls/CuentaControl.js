@@ -8,6 +8,7 @@ class CuentaControl {
     //npm install jsonwebtoken --save 
     //npm install dotenv --save
     async inicio_sesion(req, res){ //Inicio de sesión es post
+        console.log(req.body);
         if(req.body.hasOwnProperty('correo') &&
         req.body.hasOwnProperty('clave')){
             let cuentaA = await cuenta.findOne({
@@ -34,9 +35,11 @@ class CuentaControl {
                         const token = jwt.sign(token_data, key,{//Encripta el token_data con el abecedario que se le dio (key)
                             expiresIn: '2h'//tiempo de expiración del token
                         });
+                        var uuid = require('uuid');
                         var info = {
                             token: token,
-                            user: cuentaA.empleado.nombres+' '+cuentaA.empleado.apellidos
+                            user: cuentaA.empleado.nombres+' '+cuentaA.empleado.apellidos,
+                            external: uuid.v4()
                         };
                         res.status(200);
                         res.json({msg:"OK", tag:"Ha iniciado sesión", code:200, data:info});

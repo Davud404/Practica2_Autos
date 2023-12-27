@@ -77,7 +77,7 @@ router.post('/admin/empleados/guardar', empleadoControl.guardar);
 router.patch('/admin/empleados/modificar/:external', empleadoControl.modificar);
 router.get('/admin/empleados/get/:external', empleadoControl.obtener);
 //api autos
-router.get('/admin/autos', authGerente, autoControl.listar);
+router.get('/admin/autos', autoControl.listar);
 router.post('/admin/autos/guardar', autoControl.guardar);
 router.post('/admin/autos/file/save/:external', autoControl.guardarFoto);
 router.patch('/admin/autos/modificar/:external', autoControl.modificar);

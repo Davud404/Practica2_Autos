@@ -86,7 +86,7 @@ class VentaControl {
                         if(aut.color == "BLANCO" || aut.color == "PLATA"){
                             totalAux = req.body.total;
                         }else{
-                            recargoAux = req.body.recargo;
+                            recargoAux = req.body.total * 0.05;
                             totalAux = req.body.total + recargoAux;
                         }
                         var data = {
