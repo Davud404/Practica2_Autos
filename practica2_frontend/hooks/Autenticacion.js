@@ -1,5 +1,6 @@
-import { enviar } from "./Conexion";
+import { enviar, enviar_auto } from "./Conexion";
 import { getToken, save, saveToken } from "./SessionUtil";
+
 
 export async function inicio_sesion(data) {
   const sesion = await enviar('login', data);
@@ -7,13 +8,13 @@ export async function inicio_sesion(data) {
     saveToken(sesion.data.token);
     save('id', sesion.data.external);
     save('user', sesion.data.user);
+    save('rol', sesion.data.rol);
   }
   return sesion;
 }
 
-/*
 export async function guardar_auto(data){
   const token = getToken();
-  const response = await enviar_auto('index.php', data, token);
+  const response = await enviar_auto('admin/autos/guardar', data, token);
   return response;
-}*/
+}

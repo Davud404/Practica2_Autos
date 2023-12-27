@@ -39,6 +39,7 @@ class CuentaControl {
                         var info = {
                             token: token,
                             user: cuentaA.empleado.nombres+' '+cuentaA.empleado.apellidos,
+                            rol: rolAux.nombre,
                             external: uuid.v4()
                         };
                         res.status(200);

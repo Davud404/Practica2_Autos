@@ -35,7 +35,6 @@ const authGerente = function middleware(req, res, next) {
         res.status(401);
         res.json({ msg: "ERROR", tag: "Token no válido o expirado", code: 401 });
       } else {
-        console.log(decoded.external);
         let aux = await cuenta.findOne({
           where: { external_id: decoded.external },
           include: [

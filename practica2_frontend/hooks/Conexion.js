@@ -24,12 +24,12 @@ export async function enviar(recurso, data) {
 
   return responseData;
 }
-/*
+
 export async function obtener_autos(recurso, token){
   const headers = {
     "Accept": "application/json",
     "Content-type":"application/json",
-    "TOKEN-KEY": token,
+    "token": token,
   }
   const response = await fetch(URL + recurso, {
     cache:'no-store',
@@ -40,6 +40,22 @@ export async function obtener_autos(recurso, token){
   return responseData;
 }
 
+export async function obtener_usuario(recurso, token){
+  const headers = {
+    "Accept": "application/json",
+    "Content-type":"application/json",
+    "token": token,
+  }
+  const response = await fetch(URL + recurso, {
+    cache:'no-store',
+    method: "GET",
+    headers: headers,
+  });
+  const responseData = await response.json();
+  return responseData;
+}
+
+
 export async function enviar_auto(recurso, data, token) {
   if(token==""){
     console.log("no hay token xd");
@@ -47,7 +63,7 @@ export async function enviar_auto(recurso, data, token) {
     const headers = {
       "Accept": "application/json",
       "Content-type":"application/json",
-      "TOKEN-KEY": token,
+      "token": token,
     };
   
     const response = await fetch(URL + recurso, {
@@ -59,4 +75,4 @@ export async function enviar_auto(recurso, data, token) {
     const responseData = await response.json();
     return responseData;
   }
-}*/
+}

@@ -25,3 +25,7 @@ export const estaSesion = () => {
 export const getId = () => {
     return sessionStorage.getItem("id");
 }
+
+export const getRol = () =>{
+    return sessionStorage.getItem("rol");
+}
