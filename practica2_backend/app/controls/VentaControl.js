@@ -58,7 +58,6 @@ class VentaControl {
 
     async realizarVenta(req, res) {
         if (req.body.hasOwnProperty('fecha') &&
-            req.body.hasOwnProperty('total') &&
             req.body.hasOwnProperty('empleado') &&
             req.body.hasOwnProperty('cliente') &&
             req.body.hasOwnProperty('auto')) {
@@ -84,10 +83,10 @@ class VentaControl {
                         var recargoAux = 0;
                         var totalAux = 0;
                         if(aut.color == "BLANCO" || aut.color == "PLATA"){
-                            totalAux = req.body.total;
+                            totalAux = aut.precio;
                         }else{
-                            recargoAux = req.body.total * 0.05;
-                            totalAux = req.body.total + recargoAux;
+                            recargoAux = aut.precio * 0.05;
+                            totalAux = aut.precio + recargoAux;
                         }
                         var data = {
                             fecha: req.body.fecha,
