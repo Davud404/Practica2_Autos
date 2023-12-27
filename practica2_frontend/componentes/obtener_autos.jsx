@@ -55,7 +55,7 @@ const Obtener_autos = () => {
                             {rol === 'Gerente' && (
                                 <td>
                                     <div>
-                                        <Link href="#" className="btn btn-info">Modificar</Link>
+                                        <Link href={`/autos/editar_auto/${dato.external_id}`} className="btn btn-info">Modificar</Link>
                                         <Link href="#" className="btn btn-primary">Actualizar Imagen</Link>
                                     </div>
                                 </td>

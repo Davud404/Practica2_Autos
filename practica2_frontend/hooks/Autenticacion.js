@@ -1,4 +1,4 @@
-import { enviar, enviar_auto } from "./Conexion";
+import { editar_auto, enviar, enviar_auto } from "./Conexion";
 import { getToken, save, saveToken } from "./SessionUtil";
 
 
@@ -16,5 +16,11 @@ export async function inicio_sesion(data) {
 export async function guardar_auto(data){
   const token = getToken();
   const response = await enviar_auto('admin/autos/guardar', data, token);
+  return response;
+}
+
+export async function modificar_auto(data, external){
+  const token = getToken();
+  const response = await editar_auto('admin/autos/modificar/'+external, data, token);
   return response;
 }

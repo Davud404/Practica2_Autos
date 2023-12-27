@@ -55,7 +55,6 @@ export async function obtener_usuario(recurso, token){
   return responseData;
 }
 
-
 export async function enviar_auto(recurso, data, token) {
   if(token==""){
     console.log("no hay token xd");
@@ -68,6 +67,28 @@ export async function enviar_auto(recurso, data, token) {
   
     const response = await fetch(URL + recurso, {
       method: "POST",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+  
+    const responseData = await response.json();
+    return responseData;
+  }
+}
+
+export async function editar_auto(recurso, data, token) {
+  console.log(recurso);
+  if(token==""){
+    console.log("no hay token xd");
+  }else{
+    const headers = {
+      "Accept": "application/json",
+      "Content-type":"application/json",
+      "token": token,
+    };
+  
+    const response = await fetch(URL + recurso, {
+      method: "PATCH",
       headers: headers,
       body: JSON.stringify(data),
     });
