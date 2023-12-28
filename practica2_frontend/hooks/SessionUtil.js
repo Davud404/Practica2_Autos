@@ -29,3 +29,7 @@ export const getId = () => {
 export const getRol = () =>{
     return sessionStorage.getItem("rol");
 }
+
+export const getExternalUser = () =>{
+    return sessionStorage.getItem("external_user");
+}

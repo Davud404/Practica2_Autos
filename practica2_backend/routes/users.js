@@ -80,9 +80,10 @@ router.get('/admin/autos', autoControl.listar);
 router.post('/admin/autos/guardar', authGerente, autoControl.guardar);
 router.post('/admin/autos/file/save/:external',authGerente, autoControl.guardarFoto);
 router.patch('/admin/autos/modificar/:external',authGerente, autoControl.modificar);
+router.use('/multimedia', express.static('public/multimedia'));
 //api ventas
-router.get('/admin/ventas', ventaControl.listar);
-router.get('/admin/ventas/:external', ventaControl.obtenerPorMes);
+router.get('/admin/ventas/:external', ventaControl.listar);
+router.post('/admin/ventas_mes', ventaControl.obtenerPorMes);
 router.post('/admin/ventas/nueva_venta', ventaControl.realizarVenta);
 
 module.exports = router;

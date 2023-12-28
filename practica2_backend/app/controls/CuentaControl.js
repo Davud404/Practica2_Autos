@@ -14,7 +14,7 @@ class CuentaControl {
             let cuentaA = await cuenta.findOne({
                 where:{correo:req.body.correo},
                 include:[
-                    {model: models.empleado, as:"empleado", attributes: ['nombres','apellidos', 'id_rol']}
+                    {model: models.empleado, as:"empleado", attributes: ['nombres','apellidos', 'id_rol', 'external_id']}
                 ]
             });
             if(cuentaA === null || cuentaA === undefined){
@@ -40,6 +40,7 @@ class CuentaControl {
                             token: token,
                             user: cuentaA.empleado.nombres+' '+cuentaA.empleado.apellidos,
                             rol: rolAux.nombre,
+                            external_user: cuentaA.empleado.external_id,
                             external: uuid.v4()
                         };
                         res.status(200);

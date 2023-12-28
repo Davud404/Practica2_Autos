@@ -48,7 +48,7 @@ const Obtener_autos = () => {
                             <td>{i + 1}</td>
                             <td>{dato.marca}</td>
                             <td>{dato.descripcion}</td>
-                            <td><img src={`/home/Davud/Desktop/Workspace/QuintoCiclo/Practica_2/practica2_backend/public/multimedia/${dato.img}`} alt={dato.img}></img></td>
+                            <td><img src={`http://localhost:3001/multimedia/${dato.img}`} style={{width:"100px"}} alt={dato.img}></img></td>
                             <td>{dato.color}</td>
                             <td>{dato.precio}</td>
                             <td>{dato.external_id}</td>

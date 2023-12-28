@@ -40,6 +40,21 @@ export async function obtener_autos(recurso, token){
   return responseData;
 }
 
+export async function obtener_clientes(recurso, token){
+  const headers = {
+    "Accept": "application/json",
+    "Content-type":"application/json",
+    "token": token,
+  }
+  const response = await fetch(URL + recurso, {
+    cache:'no-store',
+    method: "GET",
+    headers: headers,
+  });
+  const responseData = await response.json();
+  return responseData;
+}
+
 export async function obtener_usuario(recurso, token){
   const headers = {
     "Accept": "application/json",
@@ -89,6 +104,64 @@ export async function editar_auto(recurso, data, token) {
   
     const response = await fetch(URL + recurso, {
       method: "PATCH",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+  
+    const responseData = await response.json();
+    return responseData;
+  }
+}
+
+export async function obtener_ventas(recurso, token) {
+  const headers = {
+    "Accept": "application/json",
+    "Content-type":"application/json",
+    "token": token,
+  }
+  const response = await fetch(URL + recurso, {
+    cache:'no-store',
+    method: "GET",
+    headers: headers,
+  });
+  const responseData = await response.json();
+  return responseData;
+}
+
+export async function obtener_ventas_por_mes(recurso, data, token) {
+  console.log(recurso);
+  if(token==""){
+    console.log("no hay token xd");
+  }else{
+    const headers = {
+      "Accept": "application/json",
+      "Content-type":"application/json",
+      "token": token,
+    };
+  
+    const response = await fetch(URL + recurso, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+  
+    const responseData = await response.json();
+    return responseData;
+  }
+}
+
+export async function vender(recurso, data, token) {
+  if(token==""){
+    console.log("no hay token xd");
+  }else{
+    const headers = {
+      "Accept": "application/json",
+      "Content-type":"application/json",
+      "token": token,
+    };
+  
+    const response = await fetch(URL + recurso, {
+      method: "POST",
       headers: headers,
       body: JSON.stringify(data),
     });

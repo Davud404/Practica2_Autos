@@ -10,12 +10,20 @@ var auto = models.auto;
 class VentaControl {
 
     async listar(req, res) {
+        const external = req.params.external;
+
+        var emplead = await empleado.findOne({
+            where: { external_id: external },
+            attributes: ['id']
+        });
+
         var lista = await venta.findAll({
+            where: { id_empleado: emplead.id },
             attributes: ['fecha', 'recargo', 'total', 'external_id'],
             include: [
-                { model: models.empleado, as: 'empleado', attributes: ['nombres','apellidos'] },
-                { model: models.cliente, as: 'cliente', attributes: ['nombres','apellidos'] },
-                { model: models.auto, as: 'auto', attributes: ['marca','descripcion','precio'] }
+                { model: models.empleado, as: 'empleado', attributes: ['nombres', 'apellidos', 'id'] },
+                { model: models.cliente, as: 'cliente', attributes: ['nombres', 'apellidos'] },
+                { model: models.auto, as: 'auto', attributes: ['marca', 'descripcion', 'precio', 'img'] }
             ]
         });
         res.status(200);
@@ -23,10 +31,11 @@ class VentaControl {
     }
 
     async obtenerPorMes(req, res) {
-        const external = req.params.external;
-        const fechaInicio = moment(external, 'YYYY-MM').startOf('month').toDate();
-        const fechaFin = moment(external, 'YYYY-MM').endOf('month').toDate();
-    
+        const external = req.body.fecha;
+        const fechaInicio = moment.utc(external, 'YYYY-MM').startOf('month').startOf('day').toDate();
+        const fechaFin = moment.utc(external, 'YYYY-MM').endOf('month').endOf('day').toDate();
+
+
         try {
             const lista = await venta.findAll({
                 where: {
@@ -41,7 +50,7 @@ class VentaControl {
                     { model: models.auto, as: 'auto', attributes: ['marca', 'descripcion', 'precio'] }
                 ]
             });
-    
+
             if (!lista || lista.length === 0) {
                 res.status(200);
                 res.json({ msg: "No existen ventas en ese mes", code: 200, datos: [] });
@@ -54,7 +63,7 @@ class VentaControl {
             res.json({ msg: "Error interno del servidor", code: 500, error_msg: error.message });
         }
     }
-    
+
 
     async realizarVenta(req, res) {
         if (req.body.hasOwnProperty('fecha') &&
@@ -70,21 +79,21 @@ class VentaControl {
                 res.status(401);
                 res.json({ msg: "Error", tag: "No se encontró al vendedor", code: 401 });
             } else {
-                var client = await cliente.findOne({where: { external_id: req.body.cliente }});
-                if(client == undefined || client == null){
+                var client = await cliente.findOne({ where: { external_id: req.body.cliente } });
+                if (client == undefined || client == null) {
                     res.status(401);
                     res.json({ msg: "Error", tag: "No se encontró al cliente", code: 401 });
-                }else{
-                    var aut = await auto.findOne({where: { external_id: req.body.auto }});
-                    if(aut == undefined || aut == null){
+                } else {
+                    var aut = await auto.findOne({ where: { external_id: req.body.auto } });
+                    if (aut == undefined || aut == null) {
                         res.status(401);
                         res.json({ msg: "Error", tag: "No se encontró el auto", code: 401 });
-                    }else{
+                    } else {
                         var recargoAux = 0;
                         var totalAux = 0;
-                        if(aut.color == "BLANCO" || aut.color == "PLATA"){
+                        if (aut.color == "BLANCO" || aut.color == "PLATA") {
                             totalAux = aut.precio;
-                        }else{
+                        } else {
                             recargoAux = aut.precio * 0.05;
                             totalAux = aut.precio + recargoAux;
                         }
@@ -97,7 +106,7 @@ class VentaControl {
                             id_auto: aut.id,
                             external_id: uuid.v4()
                         }
-        
+
                         if (emplead.rol.nombre == 'Vendedor') { //Para que verifique si la persona es un editor
                             var result = await venta.create(data);
                             if (result === null) {
@@ -107,11 +116,10 @@ class VentaControl {
                                 emplead.external_id = uuid.v4();
                                 client.external_id = uuid.v4();
                                 aut.external_id = uuid.v4();
-                                await emplead.save();
                                 await client.save();
                                 await aut.save();
                                 res.status(200);
-                                res.json({ msg: "OK", tag:"Venta realizada", code: 200 });
+                                res.json({ msg: "OK", tag: "Venta realizada", code: 200 });
                             }
                         } else {
                             res.status(400);

@@ -14,7 +14,7 @@ export default function Menu() {
                                 <Link href="/autos" className="nav-link active" aria-current="page">Autos</Link>
                             </li>
                             <li className="nav-item">
-                                <Link href="#" className="nav-link active" aria-current="page">Ventas</Link>
+                                <Link href="/ventas" className="nav-link active" aria-current="page">Ventas</Link>
                             </li>
                             
                         </ul>
